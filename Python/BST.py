@@ -6,29 +6,36 @@ class TreeNode(object):
 
 class Solution(object):
 	def addNode(self, root, num):
-		while root.left or root.right:
-			if num > root.val and root.right:
-				root = root.right
-			elif num < root.val and root.left:
-				root = root.left
-			else:
-				break;
+		# while root.left or root.right:
+		# 	if num > root.val and root.right:
+		# 		root = root.right
+		# 	elif num < root.val and root.left:
+		# 		root = root.left
+		# 	else:
+		# 		break;
+		# if num > root.val:
+		# 	root.right = TreeNode(num)
+		# else:
+		# 	root.left = TreeNode(num)
 		if num > root.val:
-			root.right = TreeNode(num)
+			if not root.right:
+				root.right = TreeNode(num)
+			else:
+				self.addNode(root.right, num)
 		else:
-			root.left = TreeNode(num)
+			if not root.left:
+				root.left = TreeNode(num)
+			else:
+				self.addNode(root.left, num)
 
-	def distanceOnBST(self, nums, n1, n2):
-		if nums is None or len(nums) == 0 or not n1 or not n2:
+	def distanceOnBST(self, nums, n, n1, n2):
+		if nums is None or n == 0 or not n1 or not n2:
 			return -1
 		root = TreeNode(nums[0])
-		nums.pop(0)
-		while len(nums) > 0:
-			self.addNode(root, nums[0])
-			nums.pop(0)
+		for i in xrange(1, n):
+			self.addNode(root, nums[i])
 		lca = self.findLCA(root, n1, n2)
 		return self.pathLength(lca, n1) + self.pathLength(lca, n2)
-		# return lca.val
 
 	def findLCA(self, root, n1, n2):
 		if root is not None:
@@ -58,8 +65,8 @@ class Solution(object):
 if __name__ == '__main__':
 	nums1 = [5, 6, 3, 1, 2, 4]
 	nums2 = [3, 2, 5, 6, 7, 1]
-	d1 = Solution().distanceOnBST(nums1, 2, 4)
-	d2 = Solution().distanceOnBST(nums2, 2, 7)
+	d1 = Solution().distanceOnBST(nums1, 6, 2, 4)
+	d2 = Solution().distanceOnBST(nums2, 6, 2, 7)
 	# d = Solution().distanceOnBST(nums1, None, 4)
 	# root2 = Solution().distanceOnBST(nums2)
 	# Solution().arrayToBST(nums1).left.val == 3
